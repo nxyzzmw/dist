@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Heart Letter</title>
+  <style>
+    body {
+      background-color: #ffe6f0; /* Light pink background */
+    }
+
+    #envelope-wrapper {
+      margin: 150px;
+      position: relative;
+      width: 280px;
+      height: 180px;
+      margin-left: auto;
+      margin-right: auto;
+      top: 150px;
+    }
+
+    #envelope {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      background-color: #f9c5c8;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.5s ease;
+    }
+
+    .front {
+      position: absolute;
+      width: 0;
+      height: 0;
+      z-index: 3;
+    }
+
+    .flap {
+      border-left: 140px solid transparent;
+      border-right: 140px solid transparent;
+      border-bottom: 82px solid transparent;
+      border-top: 98px solid #ff3333;
+      transform-origin: top;
+      pointer-events: none;
+      transition: transform 0.4s ease;
+    }
+
+    .pocket {
+      border-left: 140px solid #ff9999;
+      border-right: 140px solid #ff9999;
+      border-bottom: 90px solid #fd8787;
+      border-top: 90px solid transparent;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+
+    .letter {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      background-color: #ffccd5; /* Pink color */
+      width: 90%;
+      height: 90%;
+      border-radius: 6px;
+      box-shadow: 0 2px 26px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      z-index: 5; /* Make sure the letter is above everything */
+      cursor: pointer;
+      overflow: hidden; /* Hide overflow content */
+    }
+
+    .words {
+      position: absolute;
+      left: 5%;
+      width: 90%;
+      height: 80%;
+      text-align: center;
+      font-weight: bold;
+      color: #000;
+      top: 10%;
+      font-size: 14px; /* Adjust font size to fit content */
+      line-height: 1.2; /* Adjust line height for better spacing */
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .open .flap {
+      transform: rotateX(180deg);
+    }
+
+    .open .letter {
+      transform: translateX(-50%) translateY(-200px); /* Move the letter out of the envelope */
+      opacity: 1;
+    }
+
+    .open .words {
+      opacity: 1;
+    }
+
+    .closed .letter {
+      transform: translateX(-50%) translateY(30px); /* Move the letter back inside the envelope */
+      opacity: 0;
+    }
+
+    .closed .words {
+      opacity: 0;
+    }
+
+    .hearts {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      background-color: #ff3333;
+      clip-path: polygon(50% 0%, 61% 25%, 98% 35%, 75% 59%, 79% 91%, 50% 75%, 21% 91%, 25% 59%, 2% 35%, 39% 25%);
+      animation: floatUp 3s ease-out infinite;
+      opacity: 1;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translate(-50%, 0) scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(-50%, -300px) scale(0.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="envelope-wrapper">
+    <div id="envelope" class="close">
+      <div class="front flap"></div>
+      <div class="front pocket"></div>
+      <div class="letter">
+        <div class="words">
+          My Dear Bekka,<br><br>
+          I love you more each day. I miss you so much. Everything reminds me of you—your voice, your laughter, your cheeks, your beautiful eyes, and your scent. I badly want to see you and be with you.
+        </div>
+      </div>
+    </div>
+  </div>
+  <audio id="background-music" src="Hey-Nijame-Masstamilan.com.mp3"></audio>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const envelope = document.getElementById("envelope");
+      const letter = document.querySelector(".letter");
+      const audio = document.getElementById("background-music");
+
+      envelope.addEventListener("click", () => {
+        if (envelope.classList.contains("open")) {
+          envelope.classList.remove("open");
+          letter.classList.add("closed");
+          audio.pause();
+          audio.currentTime = 0;
+          removeHearts();
+        } else {
+          envelope.classList.add("open");
+          letter.classList.remove("closed");
+          audio.currentTime = 244; // Start playing from 4:04 (244 seconds)
+          audio.play();
+          showHearts(); // Show hearts immediately when the letter comes out
+        }
+      });
+
+      function showHearts() {
+        for (let i = 0; i < 20; i++) {
+          const heart = document.createElement("div");
+          heart.className = "hearts";
+          heart.style.left = `${Math.random() * 100}%`;
+          heart.style.animationDelay = `${Math.random() * 2}s`;
+          document.body.appendChild(heart);
+
+          setTimeout(() => {
+            heart.remove();
+          }, 3000); // Remove hearts after animation ends
+        }
+      }
+
+      function removeHearts() {
+        document.querySelectorAll('.hearts').forEach(heart => heart.remove());
+      }
+    });
+  </script>
+</body>
+
+</html>
